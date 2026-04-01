@@ -670,13 +670,13 @@ const BADGES={
 
 const MOVES=[
   {id:'spit',      name:'Spit',        icon:'🫧',desc:'Candy blob stuns enemies [Z]',          cost:5},
-  {id:'sit',       name:'Sit & Hide',  icon:'🧘',desc:'Enemies walk past you! [V]',             cost:8},
-  {id:'thrust',    name:'Thrust',      icon:'💨',desc:'Dash-slam knocks back [X]',              cost:10},
-  {id:'backhand',  name:'Backhand',    icon:'🤚',desc:'Spinning slap tosses enemies [C]',        cost:10},
-  {id:'twohands',  name:'Two Hands',   icon:'🙌',desc:'Powerful double-grab slam [Q]',          cost:12},
-  {id:'useballs',  name:'Use Balls',   icon:'🎱',desc:'Hurl bouncing candy balls [B]',          cost:8},
-  {id:'oil',       name:'Oil Slick',   icon:'🫙',desc:'Drop oil — enemies slip & slide! [E]',   cost:15},
-  {id:'birthdaysuit', name:'Birthday Suit', icon:'🎂',desc:'Mochi strips down — enemies stunned! [N]', cost:20},
+  {id:'sit',       name:'Sit & Hide',  icon:'🧘',desc:'Enemies walk past you! [V]',             cost:4},
+  {id:'thrust',    name:'Thrust',      icon:'💨',desc:'Dash-slam knocks back [X]',              cost:6},
+  {id:'backhand',  name:'Backhand',    icon:'🤚',desc:'Spinning slap tosses enemies [C]',        cost:3},
+  {id:'twohands',  name:'Two Hands',   icon:'🙌',desc:'Powerful double-grab slam [Q]',          cost:3},
+  {id:'useballs',  name:'Use Balls',   icon:'🎱',desc:'Hurl bouncing candy balls [B]',          cost:5},
+  {id:'oil',       name:'Oil Slick',   icon:'🫙',desc:'Drop oil — enemies slip & slide! [E]',   cost:8},
+  {id:'birthdaysuit', name:'Birthday Suit', icon:'🎂',desc:'Mochi strips down — enemies stunned! [N]', cost:10},
   {id:'luckydip',     name:'Lucky Dip',     icon:'🎰',desc:'Spin to win a random move! [L]',          cost:5},
 ];
 const BOOSTS=[
@@ -1469,7 +1469,7 @@ function update(){
 
   if(player.dead){player.deadTimer++;if(player.deadTimer>65)respawn();return;}
 
-  const spd=(AP.speedBoost?BSPD*1.5:BSPD)*(pups.tornado?3:1);
+  const spd=(AP.speedBoost?BSPD*1.25:BSPD)*(pups.tornado?3:1);
   const sizeScale=pups.giant?5:1;
   const ph=player.sitting?(player.h*0.55)*sizeScale:player.h*sizeScale;
   const pw2=player.w*sizeScale;
@@ -1564,7 +1564,6 @@ function update(){
       }
     });
     spawnParts(player.x+player.w/2,player.y+10,'#ffb3e6',14);
-    toast('🙌 Two-Hand Slam!');
   }
   if(player.twoHandsTimer>0) player.twoHandsTimer--;
 
@@ -1606,7 +1605,6 @@ function update(){
     });
     player.ballCooldown=45; keys['KeyB']=false;
     shop._use('useballs'); setTimeout(()=>{ renderShop(); renderMoveBar(); updateWallet(); }, 0); showMoveFlash('🎱 Balls Away!');
-    toast('🎱 Balls away!');
   }
   if(player.ballCooldown>0) player.ballCooldown--;
 

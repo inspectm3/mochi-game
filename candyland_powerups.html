@@ -589,10 +589,6 @@ kbd{background:#fff;border-radius:5px;padding:1px 5px;border:2px solid var(--pin
       ontouchstart="cmdTap('KeyZ')" onmousedown="cmdTap('KeyZ')">
       <span class="cb-icon">🫧</span><span class="cb-label">Spit</span>
     </button>
-    <button class="cmdBtn move-btn locked" id="cb-sit" data-move="sit" data-key="KeyV"
-      ontouchstart="cmdTap('KeyV')" onmousedown="cmdTap('KeyV')">
-      <span class="cb-icon">🧘</span><span class="cb-label">Sit/Stand</span>
-    </button>
     <button class="cmdBtn move-btn locked" id="cb-thrust" data-move="thrust" data-key="KeyX"
       ontouchstart="cmdTap('KeyX')" onmousedown="cmdTap('KeyX')">
       <span class="cb-icon">💨</span><span class="cb-label">Thrust</span>
@@ -750,7 +746,6 @@ kbd{background:#fff;border-radius:5px;padding:1px 5px;border:2px solid var(--pin
   <div class="ch"><kbd>M</kbd>Come Here!</div>
   <div class="ch"><kbd>F</kbd>Off Hand</div>
   <div class="ch"><kbd>G</kbd>Just The Tip</div>
-  <div class="ch"><kbd>V</kbd>Sit/Stand</div>
   <div class="ch"><kbd>S</kbd>Shop</div>
   <div class="ch"><kbd>R</kbd>Restart</div>
 </div>
@@ -806,7 +801,6 @@ const BADGES={
 
 const MOVES=[
   {id:'spit',      name:'Spit',           icon:'🫧',desc:'Candy blob stuns enemies [Z]',                    cost:5},
-  {id:'sit',       name:'Sit & Hide',     icon:'🧘',desc:'Enemies walk past you! [V]',                      cost:4},
   {id:'thrust',    name:'Thrust',         icon:'💨',desc:'Dash-slam knocks back [X]',                       cost:6},
   {id:'backhand',  name:'Backhand',       icon:'🤚',desc:'Spinning slap tosses enemies [C]',                 cost:3},
   {id:'twohands',  name:'Two Hands',      icon:'🙌',desc:'Powerful double-grab slam [Q]',                   cost:3},
@@ -1306,7 +1300,7 @@ function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
   // Action button cycles through owned moves
   const actionBtn = document.getElementById('mc-action');
   if(actionBtn){
-    const moveCodes=['KeyZ','KeyV','KeyX','KeyC','KeyQ','KeyB','KeyE','KeyM','KeyF','KeyG'];
+    const moveCodes=['KeyZ','KeyX','KeyC','KeyQ','KeyB','KeyE','KeyM','KeyF','KeyG'];
     let moveIdx=0;
     actionBtn.addEventListener('touchstart',e=>{
       e.preventDefault();
@@ -1316,7 +1310,7 @@ function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
         const code=moveCodes[moveIdx%moveCodes.length];
         moveIdx++;
         tried++;
-        const moveId=['spit','sit','thrust','backhand','twohands','useballs','oil','comehere','offhand','justthetip'][moveCodes.indexOf(code)];
+        const moveId=['spit','thrust','backhand','twohands','useballs','oil','comehere','offhand','justthetip'][moveCodes.indexOf(code)];
         if(shop._has(moveId)){
           keys[code]=true;
           setTimeout(()=>{ keys[code]=false; },120);
@@ -1397,7 +1391,6 @@ function showMoveFlash(label){
 // ── Available moves wallet ────────────────────────────────
 const MOVE_KEYS=[
   {id:'spit',label:'Spit',key:'Z',icon:'🫧'},
-  {id:'sit',label:'Sit',key:'V',icon:'🧘'},
   {id:'thrust',label:'Thrust',key:'X',icon:'💨'},
   {id:'backhand',label:'Backhand',key:'C',icon:'🤚'},
   {id:'twohands',label:'Two Hands',key:'Q',icon:'🙌'},
@@ -1567,7 +1560,6 @@ function joiSkip(){
 // ── Lucky Dip spin state ─────────────────────────────────
 const LD_MOVES = [
   {id:'spit',      name:'Spit',        icon:'🫧'},
-  {id:'sit',       name:'Sit & Hide',  icon:'🧘'},
   {id:'thrust',    name:'Thrust',      icon:'💨'},
   {id:'backhand',  name:'Backhand',    icon:'🤚'},
   {id:'twohands',  name:'Two Hands',   icon:'🙌'},
@@ -2019,8 +2011,7 @@ function update(){
     else if(keys['ArrowRight']||keys['KeyD']){player.vx=spd;player.facing=1;}
     else player.vx*=.74;
   }
-  if(keys['KeyV']&&shop._has('sit')){
-    if(!player.sitting){ shop._use('sit'); deferUI(); showMoveFlash('🧘 Sit & Hide'); sendMp({type:'moveFlash',label:'🧘 Sit & Hide'}); } player.sitting=!player.sitting; keys['KeyV']=false;
+  if(keys['KeyV']){ player.sitting=!player.sitting; keys['KeyV']=false; }
   }
   if(!player.onGround) player.sitting=false;
   if((keys['Space']||keys['ArrowUp'])&&player.onGround&&!player.sitting){
@@ -4207,7 +4198,7 @@ function updatePingDot(state){
 
 
 function updateCmdButtons(){
-  const moveMap={spit:'cb-spit',sit:'cb-sit',thrust:'cb-thrust',backhand:'cb-backhand',twohands:'cb-twohands',useballs:'cb-useballs',oil:'cb-oil'};
+  const moveMap={spit:'cb-spit',thrust:'cb-thrust',backhand:'cb-backhand',twohands:'cb-twohands',useballs:'cb-useballs',oil:'cb-oil'};
   Object.entries(moveMap).forEach(([move,btnId])=>{
     const btn=document.getElementById(btnId);
     if(btn) btn.classList.toggle('locked',!shop._has(move));
